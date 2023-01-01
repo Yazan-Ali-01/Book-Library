@@ -83,7 +83,9 @@ exports.getIndex = (req, res, next) => {
 
     Author.find({ name: regex })
       .then(async (author) => {
-        console.log(author);
+        if (author.length < 1) {
+          author.push({ _id: mongoose.Types.ObjectId(Math.random()) });
+        }
         const numBooks = await Book.find({
           $or: [
             { title: regex },
