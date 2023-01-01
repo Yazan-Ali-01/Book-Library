@@ -1,0 +1,91 @@
+<%- include('../includes/header.ejs') %>
+<link rel="stylesheet" href="/css/product.css">
+</head>
+
+<%- include('../includes/navigation.ejs') %>
+
+<body>
+  <nav class="bg-dark sticky-top">
+    <div class="row" style="
+    padding-bottom: 10px;
+">
+      <div class="col-6 d-flex justify-content-center mt-3">
+        <form action="/" method="GET">
+          <div class="btn-group ">
+            <% if (genre_title) { %>
+            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+              <%= genre_title[0] %>
+            </button>
+            <% } else { %>
+            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Genre</button>
+            <% } %>
+            <% if (genres.length> 0) { %>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="/">All Genres</a></li>
+              <% for (let genre of genres) { %>
+              <li><a class="dropdown-item" href="?genre=<%= genre._id %> ">
+                  <%= genre.title %>
+                </a></li>
+              <% } %>
+            </ul>
+            <% } %>
+          </div>
+        </form>
+      </div>
+      <div class="col-6 d-flex justify-content-center mt-3">
+        <form method="GET" action="/">
+          <div class="row" id="row">
+            <div class="col">
+              <input class="form-control" type="search" name="search" placeholder="Search" aria-label="Search" />
+            </div>
+            <div class="col">
+              <input type="hidden" name="_csrf" value="<%= csrfToken  %>">
+              <button class="p-auto btn btn-warning me-5 " type="submit">Search</button>
+            </div>
+        </form>
+      </div>
+    </div>
+  </nav>
+  <% if (books.length > 0) { %>
+  <article>
+    <div class="container text-center">
+      <div class="gy-5 row h-100" id="margin-row">
+        <% for (let book of books) { %>
+        <div class="col-lg-4" align="center">
+          <div class="card_margin card h-100">
+            <img src="<%= book.imageUrl %>" class="card-img-top" alt="<%= book.title.substring(1,10) %>">
+            <div class="card-body">
+              <h3 class="left-item card-title" id="title"><%= book.title.substring(1,20) %></h3>
+              <div class="row">
+                <div class="col-6">
+                  <h5 class="left-item">
+                    <%= book.author_id.name %>
+                  </h5>
+                </div>
+
+                <div class="col-6"><%= book.createdAt.toDateString() %> </div>
+              </div>
+
+              <p class="card-text left-item " style="margin-top:0.4em;">
+                <%= book.description %>
+              </p>
+            </div>
+            <span class="span-margin right-item">likes :<%= book.likes %> </span>
+            <input type="hidden" value="<%= book._id %>" name="productId">
+          </div>
+        </div>
+        <% } %>
+      </div>
+
+    </div>
+  </article>
+
+  <% } else { %>
+  <h1>No Products Found!</h1>
+  <% } %>
+
+
+  <%- include('../includes/pagination.ejs', {currentPage: currentPage, nextPage: nextPage, previousPage: previousPage, lastPage: lastPage, hasNextPage: hasNextPage, hasPreviousPage: hasPreviousPage}) %>
+
+  <script src="/js/likes.js"></script>
+  <%- include('../includes/footer.ejs') %>
