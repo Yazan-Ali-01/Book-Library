@@ -11,6 +11,7 @@ const { Result } = require("express-validator");
 const ITEMS_PER_PAGE = 20;
 
 exports.getIndex = (req, res, next) => {
+  let allGenres;
   function escapeRegex(text) {
     return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
   }
@@ -19,7 +20,6 @@ exports.getIndex = (req, res, next) => {
     let totalItems;
     let genreId;
     let genre_title = [];
-    let allGenres;
     Genre.findById(req.query.genre)
       .then((genre) => {
         genre_title.push(genre.title);
@@ -79,8 +79,10 @@ exports.getIndex = (req, res, next) => {
     const regex = new RegExp(escapeRegex(req.query.search), "gi");
     const page = +req.query.page || 1;
     let totalItems;
-    let allGenres;
-
+    Genre.find().then((genres) => {
+      console.log(genres);
+      allGenres = genres;
+    });
     Author.find({ name: regex })
       .then(async (author) => {
         if (author.length < 1) {
@@ -94,9 +96,6 @@ exports.getIndex = (req, res, next) => {
           ],
         }).countDocuments();
         totalItems = numBooks;
-        Genre.find().then((genres) => {
-          allGenres = genres;
-        });
         return await Book.find({
           $or: [
             { title: regex },
@@ -127,7 +126,6 @@ exports.getIndex = (req, res, next) => {
       });
   } else {
     const page = +req.query.page || 1;
-    let allGenres;
     Genre.find()
       .then((genres) => {
         allGenres = genres;
