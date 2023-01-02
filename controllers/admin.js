@@ -98,6 +98,7 @@ exports.getEditProducts = async (req, res, next) => {
   Genre.find()
     .then((genres) => {
       Book.findById(prodId).then((book) => {
+        console.log(book);
         if (!book) {
           return res.redirect("/");
         }
@@ -107,7 +108,7 @@ exports.getEditProducts = async (req, res, next) => {
           pageTitle: "Edit Product",
           path: "/admin/edit-product",
           editing: true,
-          book: book,
+          books: [book],
           genres: genres,
           authors: authors,
           hasError: false,

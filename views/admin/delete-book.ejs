@@ -6,44 +6,45 @@
 <body>
     <%- include('../includes/navigation.ejs') %>
     <main>
+        <div class="table-responsive-lg">
+            <table class="table">
 
-        <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#ID</th>
+                        <th scope="col">Book Title</th>
+                        <th scope="col">Added At</th>
+                        <th scope="col">Author</th>
+                        <th scope="col">Edit</th>
+                        <th scope="col">Delete</th>
+                    </tr>
+                </thead>
+                <% if (genres.length> 0) { %>
+                <tbody>
 
-            <thead>
-                <tr>
-                    <th scope="col">#ID</th>
-                    <th scope="col">Book Title</th>
-                    <th scope="col">Added At</th>
-                    <th scope="col">Author</th>
-                    <th scope="col">Edit</th>
-                    <th scope="col">Delete</th>
-                </tr>
-            </thead>
-            <% if (genres.length> 0) { %>
-            <tbody>
+                    <% for (let book of books) { %>
+                    <tr>
+                        <th scope="row"><%= book._id %> </th>
+                        <td><%= book.title %> </td>
+                        <td><%= book.createdAt.toDateString() %> </td>
+                        <td><%= book.author_id.name %> </td>
+                        <td>
+                            <a href="/admin/edit-product/<%= book._id %>" class="btn btn-warning">Edit</a>
+                        </td>
+                        <td>
+                            <form method="POST" action="/admin/delete-book">
+                                <input type="hidden" name="_csrf" value="<%= csrfToken  %>">
+                                <button class="p-auto btn btn-danger me-5" type="submit">Delete</button>
+                                <input type="hidden" name="bookId" value="<%= book._id %>">
+                            </form>
+                        </td>
+                    </tr>
 
-                <% for (let book of books) { %>
-                <tr>
-                    <th scope="row"><%= book._id %> </th>
-                    <td><%= book.title %> </td>
-                    <td><%= book.createdAt.toDateString() %> </td>
-                    <td><%= book.author_id.name %> </td>
-                    <td>
-                        <a href="/admin/edit-product/<%= book._id %>" class="btn btn-warning">Edit</a>
-                    </td>
-                    <td>
-                        <form method="POST" action="/admin/delete-book">
-                            <input type="hidden" name="_csrf" value="<%= csrfToken  %>">
-                            <button class="p-auto btn btn-danger me-5" type="submit">Delete</button>
-                            <input type="hidden" name="bookId" value="<%= book._id %>">
-                        </form>
-                    </td>
-                </tr>
-
-            </tbody>
-            <% } %>
-            <% } %>
-        </table>
+                </tbody>
+                <% } %>
+                <% } %>
+            </table>
+        </div>
 
     </main>
 

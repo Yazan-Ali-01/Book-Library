@@ -1,4 +1,5 @@
 <%- include('../includes/header.ejs') %>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="/css/product.css">
 </head>
 
@@ -11,13 +12,13 @@
 ">
       <div class="col-6 d-flex justify-content-center mt-3">
         <form action="/" method="GET">
-          <div class="btn-group ">
+          <div class="btn-group" style="background: #ffc107;">
             <% if (genre_title) { %>
             <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
               <%= genre_title[0] %>
             </button>
             <% } else { %>
-            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Genre</button>
+            <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Genre</button>
             <% } %>
             <% if (genres.length> 0) { %>
             <ul class="dropdown-menu">
@@ -81,7 +82,7 @@
   </article>
 
   <% } else { %>
-  <h1>No Products Found!</h1>
+  <h1 style="margin:20px">No Products Found!</h1>
   <% } %>
 
 
