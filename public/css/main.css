@@ -25,6 +25,9 @@ main {
 #widthed {
   width: 126px;
 }
+.nav-link:hover {
+  color: #ffeb3b;
+}
 
 .main-header__item {
   display: flex;

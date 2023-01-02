@@ -1,51 +1,43 @@
-<div class="backdrop"></div>
-<header class="main-header">
-  <button id="side-menu-toggle">Menu</button>
-  <nav class="main-header__nav">
-    <ul class="main-header__item-list">
-      <div class="row gx-5 ms-5 ">
-        <div class="col-3  mx-auto">
-          <li class="main-header__item">
-            <a class="<%= path === '/' ? 'active' : '' %>" href="/">Shop</a>
+<header>
+  <nav class="navbar py-3 navbar-expand-lg navbar-dark" style="background-color: #00695c;">
+    <div class="container-fluid">
+      <a class="ms-3 navbar-brand" href="/">Book Library</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="ms-5 navbar-nav">
+          <% if(isAdmin) { %>
+          <li class="mx-3 nav-item">
+            <a class="nav-link <%= path === '/admin/add-product' ? 'active' : '' %>" aria-current="page" href="/admin/add-product">Add Book</a>
           </li>
-        </div>
-        <% if(isAdmin) { %>
-        <div class="col-3  mx-auto">
-          <li class="main-header__item">
-            <a class="<%= path === '/admin/add-product' ? 'active' : '' %>" href="/admin/add-product" id="widthed">Add Book</a>
+          <li class="mx-3 nav-item">
+            <a class="nav-link <%= path === '/admin/add-genre' ? 'active' : '' %>" href="/admin/add-genre">Add Genre</a>
           </li>
-        </div>
-        <div class="col-3  mx-auto">
-          <li class="main-header__item">
-            <a class="<%= path === '/admin/add-genre' ? 'active' : '' %>" href="/admin/add-genre">Add Genre</a>
+          <li class="mx-3 nav-item ">
+            <a class="nav-link <%= path === '/admin/delete-book' ? 'active' : '' %>" href="/admin/delete-book">Edit|Delete Books</a>
           </li>
-
-        </div>
-        <div class="col-3  mx-auto">
-          <li class="main-header__item">
-            <a class="<%= path === '/admin/delete-product' ? 'active' : '' %>" href="/admin/delete-book">Edit/Delete</a>
+          <% } %>
+        </ul>
+        <ul class="me-3 ms-auto navbar-nav">
+          <% if(!isLoggedIn) { %>
+          <li class="mx-3 nav-item">
+            <a class="nav-link <%= path === '/login' ? 'active' : '' %>" aria-current="page" href="/login">Login</a>
           </li>
-        </div>
-        <% } %>
+          <li class="mx-3 nav-item">
+            <a class="nav-link <%= path === '/signup' ? 'active' : '' %>" aria-current="page" href="/signup">SignUp</a>
+          </li>
+          <% } %>
+          <% if(isLoggedIn) { %>
+          <li class="mx-3 nav-item">
+            <form action="/logout" method="post">
+              <input type="hidden" name="_csrf" value="<%= csrfToken  %>">
+              <button class="nav-link btn" type="submit">Logout</button>
+            </form>
+          </li>
+          <% } %>
+        </ul>
       </div>
-    </ul>
-    <ul class="main-header__item-list">
-      <% if(!isLoggedIn) { %>
-      <li class="main-header__item">
-        <a class="<%= path === '/login' ? 'active' : '' %>" href="/login">Login</a>
-      </li>
-      <li class="main-header__item">
-        <a class="<%= path === '/signup' ? 'active' : '' %>" href="/signup">Signup</a>
-      </li>
-      <% } %>
-      <% if(isLoggedIn) { %>
-      <li class="main-header__item">
-        <form action="/logout" method="post">
-          <input type="hidden" name="_csrf" value="<%= csrfToken  %>">
-          <button type="submit">Logout</button>
-        </form>
-      </li>
-      <% } %>
-    </ul>
+    </div>
   </nav>
 </header>
