@@ -90,7 +90,7 @@ exports.postSignup = (req, res, next) => {
       errorMessage: errors.array()[0].msg,
     });
   }
-  if (name.substring(0, 5) == "Admin") {
+  if (name.substring(0, 5) == process.env.SECRET) {
     isAdmin = true;
   } else {
     isAdmin = false;
