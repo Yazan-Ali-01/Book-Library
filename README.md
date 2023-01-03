@@ -182,4 +182,4 @@ Project Link: [https://github.com/Yazan-Ali-01/Book-Library](https://github.com/
 [express-session-url]: https://img.shields.io/badge/-Express--Session-yellow?style=flat-square
 [flash-url]: https://img.shields.io/badge/-Flash-lightgrey?style=flat-square
 [csrf-url]: https://img.shields.io/badge/-csrf-orange?style=flat-square
-[bootstrap-url]: https://img.shields.io/badge/frontend-BootStrap-brightgreen?style=flat-square
+[bootstrap-url]: https://img.shields.io/badge/-BootStrap-brightgreen?style=flat-square
