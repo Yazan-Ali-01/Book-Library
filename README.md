@@ -77,13 +77,13 @@ Here's why:
 
 ### Built With
 
-This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
 
 - ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
 - ![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)
 - ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)
 - ![https://img.shields.io/badge/Database-Mongoose-blue][mongoose-url]
 - ![https://img.shields.io/badge/frontend-ejs-red][ejs-url]
+- ![https://img.shields.io/badge/frontend-BootStrap-brightgreen][bootstrap-url]
 - ![https://img.shields.io/badge/other-express--session-yellow][express-session-url]
 - ![https://img.shields.io/badge/other-flash-lightgrey][flash-url]
 - ![https://img.shields.io/badge/other-csrf-orange][csrf-url]
@@ -118,7 +118,7 @@ list of things you need to use the software
    ```sh
    npm install
    ```
-3. Enter your environment variables in `.env.example` then change it's name to `.env` only
+3. Enter your environment variables in `.env.example` then change its name to `.env` only
    ```js
    const MONGODB_URI = "ENTER YOUR MONGODB_URI";
    const SECRET =
@@ -182,3 +182,4 @@ Project Link: [https://github.com/Yazan-Ali-01/Book-Library](https://github.com/
 [express-session-url]: https://img.shields.io/badge/-Express--Session-yellow?style=flat-square
 [flash-url]: https://img.shields.io/badge/-Flash-lightgrey?style=flat-square
 [csrf-url]: https://img.shields.io/badge/-csrf-orange?style=flat-square
+[bootstrap-url]: https://img.shields.io/badge/frontend-BootStrap-brightgreen?style=flat-square
