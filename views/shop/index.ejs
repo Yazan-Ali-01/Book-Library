@@ -35,13 +35,13 @@
       </div>
       <div class="col-6 d-flex justify-content-center mt-3">
         <form method="GET" action="/">
-          <div class="row" id="row">
-            <div class="col">
-              <input class="form-control" type="search" name="search" placeholder="Search" aria-label="Search" />
+          <div class="row " id="row">
+            <div class="col mt-lg-3 me-3">
+              <input class="mt-2 me-5 form-control" type="search" name="search" placeholder="Search" aria-label="Search" />
             </div>
-            <div class="col">
+            <div class="col mt-lg-3 me-3">
               <input type="hidden" name="_csrf" value="<%= csrfToken  %>">
-              <button class="p-auto btn btn-warning me-5 " type="submit">Search</button>
+              <button class="p-auto btn btn-warning me-5 mt-2  " type="submit">Search</button>
             </div>
         </form>
       </div>
