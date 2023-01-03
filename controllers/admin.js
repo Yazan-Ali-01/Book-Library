@@ -75,8 +75,8 @@ exports.postAddProduct = (req, res, next) => {
 };
 
 exports.getAddProduct = async (req, res, next) => {
-  const books = await Book.find();
   const genres = await Genre.find();
+  const books = await Book.find();
   const authors = await Author.find();
   res.render("admin/add-edit-product", {
     genre_title: null,
