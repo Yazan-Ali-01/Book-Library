@@ -11,7 +11,11 @@ router.get("/add-product", isAdmin, adminController.getAddProduct);
 
 router.post("/add-product", isAdmin, adminController.postAddProduct);
 
-router.get("/edit-product/:productId", isAdmin, adminController.getEditProducts);
+router.get(
+  "/edit-product/:productId",
+  isAdmin,
+  adminController.getEditProducts
+);
 
 router.post("/edit-product/", isAdmin, adminController.postEditProduct);
 
@@ -22,5 +26,11 @@ router.post("/add-genre", isAdmin, adminController.postAddGenre);
 router.get("/delete-book", isAdmin, adminController.getDeleteBook);
 
 router.post("/delete-book", isAdmin, adminController.postDeleteBook);
+
+router.post(
+  "/delete-book-home",
+  isAdmin,
+  adminController.postDeleteBookFromHome
+);
 
 module.exports = router;

@@ -72,7 +72,20 @@
               </p>
             </div>
             <span class="span-margin right-item">likes :<%= book.likes %> </span>
+            <hr>
             <input type="hidden" value="<%= book._id %>" name="productId">
+            <% if (isAdmin) { %>
+            <div class="row">
+              <div class="col mb-3"><a href="/admin/edit-product/<%= book._id %>" class="btn btn-success">Edit</a></div>
+              <div class="col">
+                <form method="POST" action="/admin/delete-book-home">
+                  <input type="hidden" name="_csrf" value="<%= csrfToken  %>">
+                  <button class="p-auto btn btn-danger me-5" type="submit">Delete</button>
+                  <input type="hidden" name="bookId" value="<%= book._id %>">
+                </form>
+              </div>
+            </div>
+            <% } %>
           </div>
         </div>
         <% } %>

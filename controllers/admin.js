@@ -185,6 +185,15 @@ exports.getDeleteBook = (req, res, next) => {
       });
   });
 };
+
+exports.postDeleteBookFromHome = (req, res, next) => {
+  const id = mongoose.Types.ObjectId(req.body.bookId.trim());
+
+  Book.findByIdAndRemove(id).then((result) => {
+    res.redirect("/");
+  });
+};
+
 exports.postDeleteBook = (req, res, next) => {
   // console.log(req.body.bookId);
   // req.body.bookId = +req.body.bookId;
