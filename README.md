@@ -123,7 +123,7 @@ list of things you need to use the software
    const SECRET =
      "ENTER YOUR secret first name to signup as admin account when you signup with that first name";
    ```
-4. start MongoDB local database server with your terminal with
+4. start MongoDB local database server in your terminal with
    ```sh
    mongod
    ```
