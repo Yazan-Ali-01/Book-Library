@@ -77,7 +77,6 @@ Here's why:
 
 ### Built With
 
-
 - ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
 - ![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)
 - ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)
@@ -124,8 +123,12 @@ list of things you need to use the software
    const SECRET =
      "ENTER YOUR secret first name to signup as admin account when you signup with that first name";
    ```
-4. start application with `npm run start:dev` in the terminal
-5. Run it in your browser on `localhost:3000`
+4. start MongoDB local database server with your terminal with
+   ```sh
+   mongod
+   ```
+5. start application with `npm run start:dev` in the terminal
+6. Run it in your browser on `localhost:3000`
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
