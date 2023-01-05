@@ -10,9 +10,10 @@
     <div class="row" style="
     padding-bottom: 10px;
 ">
-      <div class="col-6 d-flex justify-content-center mt-3">
+      <div class="mt-2 col-6 d-flex justify-content-center mt-3">
+
         <form action="/" method="GET">
-          <div class="btn-group" style="background: #ffc107;">
+          <div class="mt-2 btn-group" style="background: #ffc107;">
             <% if (genre_title) { %>
             <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
               <%= genre_title[0] %>
@@ -36,12 +37,12 @@
       <div class="col-6 d-flex justify-content-center mt-3">
         <form method="GET" action="/">
           <div class="row " id="row">
-            <div class="col mt-lg-3 me-3">
-              <input class="mt-2 me-5 form-control" type="search" name="search" placeholder="Search" aria-label="Search" />
+            <div class="col mt-lg-2 me-3">
+              <input class=" me-5 form-control" type="search" name="search" placeholder="Search" aria-label="Search" />
             </div>
-            <div class="col mt-lg-3 me-3">
+            <div class="col mt-lg-2 me-3">
               <input type="hidden" name="_csrf" value="<%= csrfToken  %>">
-              <button class="p-auto btn btn-warning me-5 mt-2  " type="submit">Search</button>
+              <button class="p-auto btn btn-warning me-5   " type="submit">Search</button>
             </div>
         </form>
       </div>
