@@ -119,7 +119,7 @@ list of things you need to use the software
    ```
 3. Enter your environment variables in `.env.example` then change its name to `.env` only
    ```js
-   const MONGODB_URI = "ENTER YOUR MONGODB_URI";
+   const MONGODB_URI = "ENTER YOUR MONGODB_URI (USUALLY IT"s "mongodb://localhost:27017")";
    const SECRET =
      "ENTER YOUR secret first name to signup as admin account when you signup with that first name";
    ```
