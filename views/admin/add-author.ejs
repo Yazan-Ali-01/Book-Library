@@ -1,0 +1,21 @@
+<%- include('../includes/header.ejs') %>
+<link rel="stylesheet" href="/css/forms.css">
+<link rel="stylesheet" href="/css/product.css">
+</head>
+
+<body>
+    <%- include('../includes/navigation.ejs') %>
+    <main>
+        <form class="product-form" action="/admin/add-author" method="POST">
+            <div class="form-control">
+                <label for="author-title">Author Name</label>
+                <input type="text" name="authorName" id="name">
+            </div>
+            <input type="hidden" name="_csrf" value="<%= csrfToken  %>">
+            <button class="btn btn-outline-success" type="submit">
+                Add Author
+            </button>
+        </form>
+    </main>
+
+    <%- include('../includes/footer.ejs') %>
