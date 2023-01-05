@@ -129,6 +129,8 @@ list of things you need to use the software
    ```
 5. start application with `npm run start:dev` in the terminal
 6. Run it in your browser on `localhost:3000`
+7. Note: if you're on windows, you might get some error if the mongo.exe service isn't started 
+to avoid that, in your windows search type "services" then mongoDB Server then propereties and set the startup type to automatic and go back and start that service  
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
