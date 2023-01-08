@@ -1,4 +1,5 @@
 const path = require("path");
+const nodemailer = require("nodemailer");
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
@@ -66,6 +67,7 @@ app.use((req, res, next) => {
 const shopRoutes = require("./routes/shop");
 const adminRoutes = require("./routes/admin");
 const authRoutes = require("./routes/auth");
+const { OAuth2Client } = require("google-auth-library");
 
 // app.use((req, res, next) => {
 //   // throw new Error('Sync Dummy');
