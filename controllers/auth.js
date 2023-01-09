@@ -199,7 +199,7 @@ exports.postReset = (req, res, next) => {
         id: user._id.toString(),
       };
       const token = jwt.sign(payload, secret, { expiresIn: "15m" });
-      const link = `http://localhost:3000/reset-password/${user._id.toString()}/${token}`;
+      const link = `https://yazan-book-library.cyclic.app/${user._id.toString()}/${token}`;
       console.log(link);
       if (process.env.NODE_ENV === "production") {
         readHTMLFile(
