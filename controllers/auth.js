@@ -19,7 +19,7 @@ var readHTMLFile = function (path, callback) {
 };
 
 if (process.env.NODE_ENV === "production") {
-  const CLIENT_ID = process.env.clientId;
+  const CLIENT_ID = process.env.CLIENT_ID;
   const CLIENT_SECRET = process.env.CLIENT_SECRET;
   const REDIRECT_URI = process.env.REDIRECT_URI;
   const REFRESH_TOKEN = process.env.REFRESH_TOKEN;
