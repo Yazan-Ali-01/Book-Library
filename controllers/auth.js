@@ -241,11 +241,14 @@ exports.postReset = async (req, res, next) => {
               });
             });
             await new Promise((resolve, reject) => {
-              transporter.sendMail(mailOptions, function (error, response) {
-                if (error) {
-                  console.log(error);
+              // send mail
+              transporter.sendMail(mailOptions, (err, info) => {
+                if (err) {
+                  console.error(err);
+                  reject(err);
                 } else {
-                  console.log("done");
+                  console.log(info);
+                  resolve(info);
                 }
               });
             });
