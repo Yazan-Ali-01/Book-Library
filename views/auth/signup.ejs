@@ -48,7 +48,10 @@
                 <input type="password" name="confirmPassword" id="confirmPassword">
             </div>
             <input type="hidden" name="_csrf" value="<%= csrfToken  %>">
-            <button class="btn btn-primary" type="submit">Signup</button>
+            <button class="centered btn btn-primary" type="submit">Signup</button>
         </form>
+        <div class="centered" style="margin-top: 1.7rem;"">
+                    <a href=" /reset" class="link-dark">Reset Password</a>
+        </div>
     </main>
     <%- include('../includes/footer.ejs') %>

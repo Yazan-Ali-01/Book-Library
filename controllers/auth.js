@@ -183,7 +183,7 @@ exports.getReset = (req, res, next) => {
   });
 };
 
-exports.postReset = (req, res, next) => {
+exports.postReset = async (req, res, next) => {
   const email = req.body.email;
   User.findOne({ email: email })
     .then((user) => {
@@ -210,7 +210,7 @@ exports.postReset = (req, res, next) => {
             "reset-email",
             "mail-template.html"
           ),
-          function (err, html) {
+          async function (err, html) {
             if (err) {
               console.log("error reading file", err);
               return;
@@ -228,12 +228,26 @@ exports.postReset = (req, res, next) => {
               subject: "Password Reset",
               html: htmlToSend,
             };
-            transporter.sendMail(mailOptions, function (error, response) {
-              if (error) {
-                console.log(error);
-              } else {
-                console.log("done");
-              }
+            await new Promise((resolve, reject) => {
+              // verify connection configuration
+              transporter.verify(function (error, success) {
+                if (error) {
+                  console.log(error);
+                  reject(error);
+                } else {
+                  console.log("Server is ready to take our messages");
+                  resolve(success);
+                }
+              });
+            });
+            await new Promise((resolve, reject) => {
+              transporter.sendMail(mailOptions, function (error, response) {
+                if (error) {
+                  console.log(error);
+                } else {
+                  console.log("done");
+                }
+              });
             });
           }
         );
