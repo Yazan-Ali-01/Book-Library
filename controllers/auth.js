@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
 const User = require("../models/user");
 const nodemailer = require("nodemailer");
+const path = require("path");
 const { google } = require("googleapis");
 const jwt = require("jsonwebtoken");
 var handlebars = require("handlebars");
@@ -47,6 +48,7 @@ if (process.env.NODE_ENV === "production") {
 }
 
 const { validationResult } = require("express-validator/check");
+const { default: mongoose } = require("mongoose");
 
 exports.getLogin = (req, res, next) => {
   let message = req.flash("error");
@@ -88,7 +90,7 @@ exports.postLogin = (req, res, next) => {
             req.session.isLoggedIn = true;
             return req.session.save((err) => {
               req.flash("error", "Invalid Email or Password.");
-              return res.redirect("/login");
+              return res.redirect("/");
             });
           }
 
@@ -197,11 +199,17 @@ exports.postReset = (req, res, next) => {
         id: user._id.toString(),
       };
       const token = jwt.sign(payload, secret, { expiresIn: "15m" });
-      const link = `localhost:3000/reset-password/${user._id.toString()}/${token}`;
+      const link = `http://localhost:3000/reset-password/${user._id.toString()}/${token}`;
       console.log(link);
       if (process.env.NODE_ENV === "production") {
         readHTMLFile(
-          __dirname + "../public/reset-email/mail-template.html",
+          path.join(
+            __dirname,
+            "..",
+            "public",
+            "reset-email",
+            "mail-template.html"
+          ),
           function (err, html) {
             if (err) {
               console.log("error reading file", err);
@@ -217,16 +225,19 @@ exports.postReset = (req, res, next) => {
             var mailOptions = {
               from: "book.library.dev@gmail.com",
               to: user.email,
-              subject: "Reset Password",
+              subject: "Password Reset",
               html: htmlToSend,
             };
             transporter.sendMail(mailOptions, function (error, response) {
               if (error) {
                 console.log(error);
+              } else {
+                console.log("done");
               }
             });
           }
-        ).then(res.send("A Reset Link Has Been Sent To Your Email"));
+        );
+        res.render("email-sent");
       } else {
         res.redirect("/");
       }
@@ -242,6 +253,9 @@ exports.getResetPassword = (req, res, next) => {
     message = null;
   }
   const { id, token } = req.params;
+  console.log(mongoose.Types.ObjectId(id));
+  console.log(userToReset);
+  console.log(userToReset._id);
   if (id !== userToReset._id.toString()) {
     return res.redirect("/login");
   } else {
@@ -260,6 +274,39 @@ exports.getResetPassword = (req, res, next) => {
     }
   }
 };
+exports.postResetPassword = (req, res, next) => {
+  const { password } = req.body;
+  const { id, token } = req.params;
+  console.log(token);
+  try {
+    const JWT_SECRET = "verystrongsecret";
+    const secret = JWT_SECRET + userToReset.password;
+
+    const tokenVerify = jwt.verify(token, secret);
+    User.findOne({ email: userToReset.email }).then((userDoc) => {
+      console.log(userDoc);
+      bcrypt
+        .hash(password, 12)
+        .then((hashedPw) => {
+          userDoc.name = userDoc.name;
+          userDoc.email = userDoc.email;
+          userDoc.password = hashedPw;
+          userDoc.isAdmin = userDoc.isAdmin;
+          return userDoc.save();
+        })
+        .then((result) => {
+          console.log(userDoc);
+          res.redirect("/login");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    });
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
 // exports.postLogin = (req, res, next) => {
 //   User.findById("5bab316ce0a7c75f783cb8a8")
 //     .then((user) => {

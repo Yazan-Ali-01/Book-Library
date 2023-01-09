@@ -135,7 +135,12 @@ exports.postEditProduct = (req, res, next) => {
       book.imageUrl = updatedImageUrl;
       book.author_id = book.author_id;
       book.likes = book.likes;
-      return book.save();
+      return book.save(function (err) {
+        if (err) {
+          console.log(err);
+          return;
+        }
+      });
     })
     .then((result) => {
       console.log("UPDATED Book!");
