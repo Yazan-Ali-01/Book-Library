@@ -9,7 +9,7 @@ const flash = require("connect-flash");
 const csrf = require("csurf");
 
 const User = require("./models/user");
-
+//nothing comment
 const MONGODB_URI = process.env.MONGODB_URI;
 
 const app = express();
