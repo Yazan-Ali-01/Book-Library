@@ -174,30 +174,6 @@ exports.postAddGenre = (req, res, next) => {
   });
 };
 
-exports.getAddAuthor = (req, res, next) => {
-  Author.find().then((authors) => {
-    Book.find().then((book) => {
-      res.render("admin/add-author", {
-        genre_title: null,
-        pageTitle: "Add Author",
-        path: "/admin/add-author",
-        books: book,
-        authors: authors,
-      });
-    });
-  });
-};
-
-exports.postAddAuthor = (req, res, next) => {
-  const name = req.body.authorName;
-  const author = new Author({
-    name: name,
-  });
-  author.save().then((result) => {
-    res.redirect("/");
-  });
-};
-
 exports.getDeleteBook = (req, res, next) => {
   Genre.find().then((genres) => {
     Book.find()
