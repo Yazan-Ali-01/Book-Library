@@ -7,10 +7,17 @@ const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
 const flash = require("connect-flash");
 const csrf = require("csurf");
-
+const csvtojson = require("csvtojson");
 const User = require("./models/user");
-//nothing comment
+const Book = require("./models/book");
+const bookGenre = require("./models/book_genre");
+const Author = require("./models/author");
+const Genre = require("./models/genre");
+
 const MONGODB_URI = process.env.MONGODB_URI;
+const connectionOptions = {
+  dbName: "book_store",
+};
 
 const app = express();
 
@@ -85,12 +92,48 @@ app.use("/admin", adminRoutes);
 app.use(authRoutes);
 
 mongoose
-  .connect(MONGODB_URI)
+  .connect(MONGODB_URI, connectionOptions)
   .then((result) => {
     app.listen(process.env.PORT || 3000);
-    console.log(
-      "Started Server #######################################################################################################################"
-    );
+    if (MONGODB_URI.slice(0, 9) === "mongodb:/") {
+      Book.find()
+        .countDocuments()
+        .then((count) => {
+          if (count > 0) {
+            return;
+          }
+          csvtojson()
+            .fromFile("./dbData/Books.csv")
+            .then((csvData) => {
+              Book.insertMany(csvData);
+            })
+            .then(
+              csvtojson()
+                .fromFile("./dbData/Authors.csv")
+                .then((csvData) => {
+                  Author.insertMany(csvData);
+                })
+            )
+            .then(
+              csvtojson()
+                .fromFile("./dbData/BookGenres.csv")
+                .then((csvData) => {
+                  bookGenre.insertMany(csvData);
+                })
+            )
+            .then(
+              csvtojson()
+                .fromFile("./dbData/Genres.csv")
+                .then((csvData) => {
+                  Genre.insertMany(csvData);
+                })
+            )
+            .catch((err) => {
+              console.log(err);
+            });
+        });
+    }
+    console.log("Started Server #");
   })
   .catch((err) => {
     console.log(err);

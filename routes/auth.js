@@ -62,30 +62,19 @@ router.post(
 
 router.get(
   "/reset-password/:id/:token",
-  body("email").isEmail().withMessage("Please Enter A Valid Email"),
 
   authController.getResetPassword
 );
 
-router.post(
-  "/reset-password/:id/:token",
-  [
-    body("email").isEmail().withMessage("Please Enter A Valid Email"),
-    body("confirmNewPassword").custom((value, { req }) => {
-      if (value !== req.body.newPassword) {
-        throw new Error("Confirm Password doesn't match Password");
-      }
-      return true;
-    }),
-  ],
+// router.post(
+//   "/reset-password/:id/:token",
 
-  authController.postResetPassword
-);
+//   authController.postResetPassword
+// );
 
 router.post(
   "/reset",
   [
-    body("email").isEmail().withMessage("Please Enter A Valid Email"),
     body("email").isEmail().withMessage("Please Enter A Valid Email"),
     body("newPassword")
       .isLength({

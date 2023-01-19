@@ -135,12 +135,7 @@ exports.postEditProduct = (req, res, next) => {
       book.imageUrl = updatedImageUrl;
       book.author_id = book.author_id;
       book.likes = book.likes;
-      return book.save(function (err) {
-        if (err) {
-          console.log(err);
-          return;
-        }
-      });
+      return book.save();
     })
     .then((result) => {
       console.log("UPDATED Book!");
@@ -170,6 +165,30 @@ exports.postAddGenre = (req, res, next) => {
     title: title,
   });
   genre.save().then((result) => {
+    res.redirect("/");
+  });
+};
+
+exports.getAddAuthor = (req, res, next) => {
+  Author.find().then((authors) => {
+    Book.find().then((book) => {
+      res.render("admin/add-author", {
+        genre_title: null,
+        pageTitle: "Add Author",
+        path: "/admin/add-author",
+        books: book,
+        authors: authors,
+      });
+    });
+  });
+};
+
+exports.postAddAuthor = (req, res, next) => {
+  const name = req.body.authorName;
+  const author = new Author({
+    name: name,
+  });
+  author.save().then((result) => {
     res.redirect("/");
   });
 };

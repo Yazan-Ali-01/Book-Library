@@ -23,6 +23,10 @@ router.get("/add-genre", isAdmin, adminController.getAddGenre);
 
 router.post("/add-genre", isAdmin, adminController.postAddGenre);
 
+router.get("/add-author", isAdmin, adminController.getAddAuthor);
+
+router.post("/add-author", isAdmin, adminController.postAddAuthor);
+
 router.get("/delete-book", isAdmin, adminController.getDeleteBook);
 
 router.post("/delete-book", isAdmin, adminController.postDeleteBook);
