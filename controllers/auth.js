@@ -1,50 +1,5 @@
 const bcrypt = require("bcryptjs");
 const User = require("../models/user");
-const nodemailer = require("nodemailer");
-const { google } = require("googleapis");
-const jwt = require("jsonwebtoken");
-var handlebars = require("handlebars");
-var fs = require("fs");
-let transporter;
-let userToReset;
-
-var readHTMLFile = function (path, callback) {
-  fs.readFile(path, { encoding: "utf-8" }, function (err, html) {
-    if (err) {
-      callback(err);
-    } else {
-      callback(null, html);
-    }
-  });
-};
-
-if (process.env.NODE_ENV === "production") {
-  const CLIENT_ID = process.env.clientId;
-  const CLIENT_SECRET = process.env.CLIENT_SECRET;
-  const REDIRECT_URI = process.env.REDIRECT_URI;
-  const REFRESH_TOKEN = process.env.REFRESH_TOKEN;
-
-  const oAuth2Client = new google.auth.OAuth2(
-    CLIENT_ID,
-    CLIENT_SECRET,
-    REDIRECT_URI
-  );
-  oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
-
-  const accessToken = oAuth2Client.getAccessToken().then((result) => {
-    transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        type: "OAuth2",
-        user: "book.library.dev@gmail.com",
-        clientId: CLIENT_ID,
-        clientSecret: CLIENT_SECRET,
-        refreshToken: REFRESH_TOKEN,
-        accessToken: accessToken,
-      },
-    });
-  });
-}
 
 const { validationResult } = require("express-validator/check");
 
@@ -87,18 +42,17 @@ exports.postLogin = (req, res, next) => {
             req.session.user = user;
             req.session.isLoggedIn = true;
             return req.session.save((err) => {
-              req.flash("error", "Invalid Email or Password.");
-              return res.redirect("/login");
+              return res.redirect("/");
             });
           }
-
+          req.flash("error", "Invalid Email or Password.");
           res.redirect("/login");
         })
         .catch((err) => {
           res.redirect("/login");
         });
     })
-    .catch((err) => console.log("err"));
+    .catch((err) => console.log(err));
 };
 
 exports.postLogout = (req, res, next) => {
@@ -126,6 +80,7 @@ exports.postSignup = (req, res, next) => {
   const name = req.body.name;
   const email = req.body.email;
   const password = req.body.password;
+  const confirmPassword = req.body.confirmPassword;
   let errors = validationResult(req);
   let isAdmin;
   if (!errors.isEmpty()) {
@@ -183,83 +138,43 @@ exports.getReset = (req, res, next) => {
 
 exports.postReset = (req, res, next) => {
   const email = req.body.email;
+  const oldPassword = req.body.oldPassword;
+  const newPassword = req.body.newPassword;
   User.findOne({ email: email })
     .then((user) => {
-      userToReset = user;
       if (!user) {
-        req.flash("error", "Invalid Email");
+        req.flash("error", "Invalid Email or Password.");
         return res.redirect("/reset");
       }
-      const JWT_SECRET = "verystrongsecret";
-      const secret = JWT_SECRET + user.password;
-      const payload = {
-        email: user.email,
-        id: user._id.toString(),
-      };
-      const token = jwt.sign(payload, secret, { expiresIn: "15m" });
-      const link = `localhost:3000/reset-password/${user._id.toString()}/${token}`;
-      console.log(link);
-      if (process.env.NODE_ENV === "production") {
-        readHTMLFile(
-          __dirname + "../public/reset-email/mail-template.html",
-          function (err, html) {
-            if (err) {
-              console.log("error reading file", err);
-              return;
-            }
-            var template = handlebars.compile(html);
-            var replacements = {
-              name: user.name,
-              action_url: link,
-              support_url: "book.library.dev@gmail.com",
-            };
-            var htmlToSend = template(replacements);
-            var mailOptions = {
-              from: "book.library.dev@gmail.com",
-              to: user.email,
-              subject: "Reset Password",
-              html: htmlToSend,
-            };
-            transporter.sendMail(mailOptions, function (error, response) {
-              if (error) {
-                console.log(error);
-              }
-            });
+      bcrypt
+        .compare(oldPassword, user.password)
+        .then((doMatch) => {
+          if (doMatch) {
+            bcrypt
+              .hash(newPassword, 12)
+              .then((hashedPw) => {
+                user.name = user.name;
+                user.email = user.email;
+                user.password = hashedPw;
+                user.isAdmin = user.isAdmin;
+                return user.save();
+              })
+              .then((result) => {
+                res.redirect("/login");
+              });
+          } else {
+            req.flash("error", "Invalid Email or Password.");
+            res.redirect("/reset");
           }
-        ).then(res.send("A Reset Link Has Been Sent To Your Email"));
-      } else {
-        res.redirect("/");
-      }
+        })
+
+        .catch((err) => {
+          res.redirect("/login");
+        });
     })
     .catch((err) => console.log(err));
 };
 
-exports.getResetPassword = (req, res, next) => {
-  let message = req.flash("error");
-  if (message.length > 0) {
-    message = message[0];
-  } else {
-    message = null;
-  }
-  const { id, token } = req.params;
-  if (id !== userToReset._id.toString()) {
-    return res.redirect("/login");
-  } else {
-    const JWT_SECRET = "verystrongsecret";
-    const secret = JWT_SECRET + userToReset.password;
-    try {
-      const payload = jwt.verify(token, secret);
-      res.render("auth/reset-password", {
-        pageTitle: "Reset Password",
-        path: "auth/reset-password",
-        errorMessage: message,
-      });
-    } catch (error) {
-      console.log(error);
-      res.redirect("/login");
-    }
-  }
-};
 // exports.postLogin = (req, res, next) => {
 //   User.findById("5bab316ce0a7c75f783cb8a8")
 //     .then((user) => {
@@ -288,15 +203,3 @@ exports.getResetPassword = (req, res, next) => {
 // };
 //   });
 // };
-// if (process.env.NODE_ENV === "production") {
-//   transporter
-//     .sendMail({
-//       to: "yazan.ali.dev@gmail.com",
-//       from: "Book Library Website <book.library.dev@gmail.com>",
-//       subject: "test",
-//       html: "<h1>thats a test</h1>",
-//     })
-//     .then(res.redirect("/"));
-// } else {
-//   res.redirect("/");
-// }

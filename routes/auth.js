@@ -56,24 +56,6 @@ router.get(
 
 router.post(
   "/reset",
-
-  authController.postReset
-);
-
-router.get(
-  "/reset-password/:id/:token",
-
-  authController.getResetPassword
-);
-
-// router.post(
-//   "/reset-password/:id/:token",
-
-//   authController.postResetPassword
-// );
-
-router.post(
-  "/reset",
   [
     body("email").isEmail().withMessage("Please Enter A Valid Email"),
     body("newPassword")
