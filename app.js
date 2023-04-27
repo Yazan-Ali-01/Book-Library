@@ -1,38 +1,39 @@
-const path = require("path");
-const express = require("express");
-const bodyParser = require("body-parser");
-const mongoose = require("mongoose");
-const session = require("express-session");
-const MongoDBStore = require("connect-mongodb-session")(session);
-const flash = require("connect-flash");
-const csrf = require("csurf");
-const csvtojson = require("csvtojson");
-const User = require("./models/user");
-const Book = require("./models/book");
-const bookGenre = require("./models/book_genre");
-const Author = require("./models/author");
-const Genre = require("./models/genre");
+const path = require('path');
+const express = require('express');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const session = require('express-session');
+const MongoDBStore = require('connect-mongodb-session')(session);
+const flash = require('connect-flash');
+const csrf = require('csurf');
+const csvtojson = require('csvtojson');
+const User = require('./models/user');
+const Book = require('./models/book');
+const bookGenre = require('./models/book_genre');
+const Author = require('./models/author');
+const Genre = require('./models/genre');
 
 const MONGODB_URI = process.env.MONGODB_URI;
 const connectionOptions = {
-  dbName: "book_store",
+  dbName: 'book_store',
 };
 
 const app = express();
+console.log(Date.now().toString());
 
 const store = new MongoDBStore({
   uri: MONGODB_URI,
-  collection: "sessions",
+  collection: 'sessions',
 });
 
-app.set("view engine", "ejs");
-app.set("views", "views");
+app.set('view engine', 'ejs');
+app.set('views', 'views');
 
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(
   session({
-    secret: "somesupersecret",
+    secret: 'somesupersecret',
     resave: false,
     saveUninitialized: false,
     store: store,
@@ -63,9 +64,9 @@ app.use((req, res, next) => {
   next();
 });
 
-const shopRoutes = require("./routes/shop");
-const adminRoutes = require("./routes/admin");
-const authRoutes = require("./routes/auth");
+const shopRoutes = require('./routes/shop');
+const adminRoutes = require('./routes/admin');
+const authRoutes = require('./routes/auth');
 
 // app.use((req, res, next) => {
 //   // throw new Error('Sync Dummy');
@@ -86,14 +87,14 @@ const authRoutes = require("./routes/auth");
 // });
 
 app.use(shopRoutes);
-app.use("/admin", adminRoutes);
+app.use('/admin', adminRoutes);
 app.use(authRoutes);
 
 mongoose
   .connect(MONGODB_URI, connectionOptions)
   .then((result) => {
     app.listen(process.env.PORT || 3000);
-    if (MONGODB_URI.slice(0, 9) === "mongodb:/") {
+    if (MONGODB_URI.slice(0, 9) === 'mongodb:/') {
       Book.find()
         .countDocuments()
         .then((count) => {
@@ -101,27 +102,27 @@ mongoose
             return;
           }
           csvtojson()
-            .fromFile("./dbData/Books.csv")
+            .fromFile('./dbData/Books.csv')
             .then((csvData) => {
               Book.insertMany(csvData);
             })
             .then(
               csvtojson()
-                .fromFile("./dbData/Authors.csv")
+                .fromFile('./dbData/Authors.csv')
                 .then((csvData) => {
                   Author.insertMany(csvData);
                 })
             )
             .then(
               csvtojson()
-                .fromFile("./dbData/BookGenres.csv")
+                .fromFile('./dbData/BookGenres.csv')
                 .then((csvData) => {
                   bookGenre.insertMany(csvData);
                 })
             )
             .then(
               csvtojson()
-                .fromFile("./dbData/Genres.csv")
+                .fromFile('./dbData/Genres.csv')
                 .then((csvData) => {
                   Genre.insertMany(csvData);
                 })
@@ -131,7 +132,7 @@ mongoose
             });
         });
     }
-    console.log("Started Server #");
+    console.log('Started Server #');
   })
   .catch((err) => {
     console.log(err);
